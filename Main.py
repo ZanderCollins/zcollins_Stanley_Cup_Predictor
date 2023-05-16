@@ -1,35 +1,32 @@
 # File created by Zander Collins 
 
-''' 
-Goal:
+# imports library requests
+import requests
+from bs4 import BeautifulSoup 
+import pandas as pd
 
-Scrape data off NHL stats website 
-retrieve data/stats of each play off team
-compare data/stats for each round in the playoffs
-give a final winner or prediction 
+# pulls player stats from websites
+url = 'https://www.hockey-reference.com/leagues/NHL_2023_skaters.html'
+response = requests.get(url)
 
-Website = https://bracketchallenge.nhl.com/en/bracket?bracket_id=1&entry_id=611085"
+# adds in html parser which assists with webscraping
+soup = BeautifulSoup(response.text, 'html.parser')
 
-'''
+# defines the name of each player
+Name = soup.findAll("td", attrs={"data-stat":"player"})
+# defines the goals scored by each player this season so far 
+Goals = soup.findAll("td", attrs={"data-stat":"goals"})
+# defines the primary assists of each player this season so far
+Assists = soup.findAll("td", attrs={"data-stat":"assists"})
+# defines the team's power play percentage from the website 
+PenaltyMinutes = soup.findAll("td", attrs={"data-stat":"pen_min"})
 
-'''
-brainstorming:
-get matchups off of website 
-base chance = 50/50 
-asses 3 different variables off website
-    -goals per game
-    -goals against
-    -power place percentage
-for the team with greater stat
-    -take away 3% from the other team 
-    -add 3% to team win percentage 
-run all 3 comparisons
-get final win percentages = x% vs y%
-randomly choose between given the percentages
-winner of round is established 
-create second round 
-redo given comparion again 
-until the final winner is chosen
-''' 
+# a loop that will print the stats of the categories from the website
+for i in range(len(Name)):
+    print(Name[i].text + " " + Goals[i].text + " Goals " + Assists[i].text + " Assists " 
+          + PenaltyMinutes[i].text + " Penalty Minutes ") 
+    
+
+
 
 
