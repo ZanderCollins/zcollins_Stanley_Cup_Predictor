@@ -33,9 +33,9 @@ for i in range(len(Name)):
     penalty_minutes = int(PenaltyMinutes[i].text)
 
     # translates the raw player stats into the fantasy/point amounts
-    Goal_Points = int(Goals[i].text) * 2 
+    Goal_Points = goals * 2 
     Assist_Points = assists
-    Penalty_Points = int(PenaltyMinutes[i].text) * -.15
+    Penalty_Points = penalty_minutes * -.15
     Total_Points = Goal_Points + Assist_Points + Penalty_Points
 
     # creates a list to hold all of the stats/information of a given player 
@@ -47,7 +47,7 @@ for i in range(len(Name)):
         'Total Points' : Total_Points
     })
 
-# function that sorts the players from worst to best based on total points
+# function that sorts the players from least to most total points -> worst = 1, best = max
 sorted_player_stats = sorted(player_stats, key=lambda x: x['Total Points'])
 
 # ranks the players from worst to best and displays their name and all of the parts that make up player_stats 
