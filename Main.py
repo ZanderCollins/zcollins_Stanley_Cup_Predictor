@@ -12,6 +12,7 @@ response = requests.get(url)
 # adds in html parser which assists with webscraping
 soup = BeautifulSoup(response.text, 'html.parser')
 
+
 # defines the name of each player
 Name = soup.findAll("td", attrs={"data-stat":"player"})
 # defines the goals scored by each player this season so far 
@@ -26,7 +27,11 @@ for i in range(len(Name)):
     print(Name[i].text + " " + Goals[i].text + " Goals " + Assists[i].text + " Assists " 
           + PenaltyMinutes[i].text + " Penalty Minutes ") 
     
+    Goal_Points = int(Goals[i].text) * 2 
+    Assist_Points = int(Assists[i].text)
+    Penalty_Points = int(PenaltyMinutes[i].text) * -.15
+    TotalPoints = Goal_Points + Assist_Points + Penalty_Points
+    TotalPointsIndex = "players ranked highest to lowest based on number of Total Points"
 
-
-
+    print("Total Points: " + str(TotalPoints))
 
