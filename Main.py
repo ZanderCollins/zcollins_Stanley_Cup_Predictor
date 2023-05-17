@@ -1,4 +1,5 @@
 # File created by Zander Collins 
+# Minor help recieved from my dad(very smart computer guy(masters in Computer Science))
 
 # imports library requests
 import requests
@@ -12,6 +13,7 @@ response = requests.get(url)
 # adds in html parser which assists with webscraping
 soup = BeautifulSoup(response.text, 'html.parser')
 
+player_stats = []
 
 # defines the name of each player
 Name = soup.findAll("td", attrs={"data-stat":"player"})
@@ -24,14 +26,35 @@ PenaltyMinutes = soup.findAll("td", attrs={"data-stat":"pen_min"})
 
 # a loop that will print the stats of the categories from the website
 for i in range(len(Name)):
-    print(Name[i].text + " " + Goals[i].text + " Goals " + Assists[i].text + " Assists " 
-          + PenaltyMinutes[i].text + " Penalty Minutes ") 
-    
+    # assigns the specific web information/stats into usable variables 
+    player_name = Name[i].text
+    goals = int(Goals[i].text)
+    assists = int(Assists[i].text)
+    penalty_minutes = int(PenaltyMinutes[i].text)
+
+    # translates the raw player stats into the fantasy/point amounts
     Goal_Points = int(Goals[i].text) * 2 
-    Assist_Points = int(Assists[i].text)
+    Assist_Points = assists
     Penalty_Points = int(PenaltyMinutes[i].text) * -.15
-    TotalPoints = Goal_Points + Assist_Points + Penalty_Points
-    TotalPointsIndex = "players ranked highest to lowest based on number of Total Points"
+    Total_Points = Goal_Points + Assist_Points + Penalty_Points
 
-    print("Total Points: " + str(TotalPoints))
+    # creates a list to hold all of the stats/information of a given player 
+    player_stats.append({
+        'Player' : player_name, 
+        'Goals' : goals, 
+        'Assists' : assists, 
+        'Penalty Minutes' : penalty_minutes, 
+        'Total Points' : Total_Points
+    })
 
+# function that sorts the players from worst to best based on total points
+sorted_player_stats = sorted(player_stats, key=lambda x: x['Total Points'])
+
+# ranks the players from worst to best and displays their name and all of the parts that make up player_stats 
+for rank, player in enumerate(sorted_player_stats, start = 1):
+    print(f"Rank {len(sorted_player_stats) - rank + 1}: {player['Player']}")
+    print(f"Goals: {player['Goals']}")
+    print(f"Assists: {player['Assists']}")
+    print(f"Penalty Minutes: {player['Penalty Minutes']}")
+    print(f"Total Points: {player['Total Points']}")
+    print()
